@@ -17,7 +17,7 @@ public class UserService {
      *  username Имя пользователя (уникальный идентификатор).
      *  password Пароль пользователя.
      *  isAdmin  Флаг, указывающий, является ли пользователь администратором.
-     * @throws IllegalArgumentException Если пользователь с таким именем уже существует.
+     * throws IllegalArgumentException Если пользователь с таким именем уже существует.
      */
     public void registerUser(String username, String password, boolean isAdmin) {
         if (users.containsKey(username)) {
@@ -31,8 +31,8 @@ public class UserService {
      *
      *  username Имя пользователя для аутентификации.
      *  password Пароль пользователя.
-     * @return Аутентифицированный пользователь.
-     * @throws IllegalArgumentException Если имя пользователя или пароль неверные.
+     * return Аутентифицированный пользователь.
+     * throws IllegalArgumentException Если имя пользователя или пароль неверные.
      */
     public User authenticateUser(String username, String password) {
         User user = users.get(username);

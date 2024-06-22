@@ -17,7 +17,7 @@ public class ResourceService {
      *  id               Идентификатор ресурса.
      *  name             Название ресурса.
      *  isConferenceRoom Флаг, указывающий, является ли ресурс конференц-залом.
-     * @throws IllegalArgumentException Если ресурс с таким идентификатором уже существует.
+     * throws IllegalArgumentException Если ресурс с таким идентификатором уже существует.
      */
     public void addResource(String id, String name, boolean isConferenceRoom) {
         if (resources.containsKey(id)) {
@@ -30,7 +30,7 @@ public class ResourceService {
      * Возвращает ресурс по его идентификатору.
      *
      *  id Идентификатор ресурса.
-     * @return Ресурс с указанным идентификатором или null, если ресурс не найден.
+     * return Ресурс с указанным идентификатором или null, если ресурс не найден.
      */
     public Resource getResource(String id) {
         return resources.get(id);
@@ -39,7 +39,7 @@ public class ResourceService {
     /**
      * Возвращает все ресурсы, доступные в системе.
      *
-     * @return Карта всех ресурсов, где ключ - идентификатор ресурса, значение - сам ресурс.
+     * return Карта всех ресурсов, где ключ - идентификатор ресурса, значение - сам ресурс.
      */
     public Map<String, Resource> getAllResources() {
         return new HashMap<>(resources);

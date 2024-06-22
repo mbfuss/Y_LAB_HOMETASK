@@ -26,7 +26,6 @@ public class App {
     /**
      * Точка входа в приложение.
      *
-     * @param args Аргументы командной строки (не используются).
      */
     public static void main(String[] args) {
         ConsoleOutputHandler.print("Welcome to Coworking Service!");
