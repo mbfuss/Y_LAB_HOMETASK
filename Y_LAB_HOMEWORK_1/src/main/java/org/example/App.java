@@ -15,6 +15,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 /**
+ *
  * Главный класс приложения для управления бронированиями ресурсов.
  */
 public class App {
