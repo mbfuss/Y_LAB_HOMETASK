@@ -1,44 +1,31 @@
 package org.example.service;
 
 import org.example.model.User;
+import org.example.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Сервисный класс для управления пользователями.
- */
 public class UserService {
-    private Map<String, User> users = new HashMap<>();
+    private UserRepository userRepository;
 
-    /**
-     * Регистрирует нового пользователя в системе.
-     *
-     *  username Имя пользователя (уникальный идентификатор).
-     *  password Пароль пользователя.
-     *  isAdmin  Флаг, указывающий, является ли пользователь администратором.
-     * throws IllegalArgumentException Если пользователь с таким именем уже существует.
-     */
-    public void registerUser(String username, String password, boolean isAdmin) {
-        if (users.containsKey(username)) {
-            throw new IllegalArgumentException("User already exists");
-        }
-        users.put(username, new User(username, password, isAdmin));
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    /**
-     * Аутентифицирует пользователя по его имени пользователя и паролю.
-     *
-     *  username Имя пользователя для аутентификации.
-     *  password Пароль пользователя.
-     * return Аутентифицированный пользователь.
-     * throws IllegalArgumentException Если имя пользователя или пароль неверные.
-     */
-    public User authenticateUser(String username, String password) {
-        User user = users.get(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+    public void registerUser(String username, String password, boolean isAdmin) {
+        if (userRepository.findByUsername(username) != null) {
+            throw new IllegalArgumentException("Username already exists");
         }
-        throw new IllegalArgumentException("Invalid username or password");
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAdmin(isAdmin);
+        userRepository.save(user);
+    }
+
+    public User authenticateUser(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        if (user == null || !user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+        return user;
     }
 }

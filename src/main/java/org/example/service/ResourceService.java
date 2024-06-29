@@ -1,47 +1,29 @@
 package org.example.service;
 
 import org.example.model.Resource;
+import org.example.repository.ResourceRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-/**
- * Сервисный класс для управления ресурсами.
- */
 public class ResourceService {
-    private Map<String, Resource> resources = new HashMap<>();
+    private ResourceRepository resourceRepository;
 
-    /**
-     * Добавляет новый ресурс в систему.
-     *
-     *  id               Идентификатор ресурса.
-     *  name             Название ресурса.
-     *  isConferenceRoom Флаг, указывающий, является ли ресурс конференц-залом.
-     * throws IllegalArgumentException Если ресурс с таким идентификатором уже существует.
-     */
-    public void addResource(String id, String name, boolean isConferenceRoom) {
-        if (resources.containsKey(id)) {
-            throw new IllegalArgumentException("Resource with this ID already exists");
-        }
-        resources.put(id, new Resource(id, name, isConferenceRoom));
+    public ResourceService(ResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
     }
 
-    /**
-     * Возвращает ресурс по его идентификатору.
-     *
-     *  id Идентификатор ресурса.
-     * return Ресурс с указанным идентификатором или null, если ресурс не найден.
-     */
-    public Resource getResource(String id) {
-        return resources.get(id);
+    public void addResource(String name, boolean isConferenceRoom) {
+        Resource resource = new Resource();
+        resource.setName(name);
+        resource.setConferenceRoom(isConferenceRoom);
+        resourceRepository.save(resource);
     }
 
-    /**
-     * Возвращает все ресурсы, доступные в системе.
-     *
-     * return Карта всех ресурсов, где ключ - идентификатор ресурса, значение - сам ресурс.
-     */
-    public Map<String, Resource> getAllResources() {
-        return new HashMap<>(resources);
+    public Resource getResource(Long id) {
+        return resourceRepository.findById(id);
+    }
+
+    public List<Resource> getAllResources() {
+        return resourceRepository.findAll();
     }
 }
