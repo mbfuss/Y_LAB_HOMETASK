@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: admin
+      changes:
+        - insert:
+            tableName: users
+            schemaName: coworking
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: user_seq
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: admin_password
+              - column:
+                  name: is_admin
+                  value: true
+
+        - insert:
+            tableName: resources
+            schemaName: coworking
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: resource_seq
+              - column:
+                  name: name
+                  value: Conference Room 1
+              - column:
+                  name: is_conference_room
+                  value: true
