@@ -54,6 +54,7 @@
 ## Docker
 
 Для запуска PostgreSQL в контейнере Docker используйте `docker-compose.yml`:
+
 ```yaml
 version: '3.8'
 services:
@@ -66,6 +67,7 @@ services:
     ports:
       - "5432:5432"
 
+```
 
 # Вклад в проект
 
