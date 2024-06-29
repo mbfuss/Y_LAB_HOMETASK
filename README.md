@@ -31,8 +31,8 @@
 2. Настройте PostgreSQL базу данных и измените параметры в файле `config.properties`:
     ```properties
     db.url=jdbc:postgresql://localhost:5432/coworking
-    db.username=yourusername
-    db.password=yourpassword
+    db.username=usver
+    db.password=12345
     ```
 
 3. Запустите миграции Liquibase для создания и заполнения таблиц:
