@@ -18,6 +18,7 @@
 - Java 11+
 - PostgreSQL
 - Liquibase
+- Docker
 
 ## Установка
 
