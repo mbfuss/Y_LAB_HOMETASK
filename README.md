@@ -22,22 +22,38 @@
 
 ## Установка
 
-1. Склонируйте репозиторий:
-    ```sh
-    git clone <repository-url>
-    cd <repository-directory>
-    ```
+1. Склонируйте репозиторий
 
-2. Настройте PostgreSQL базу данных и измените параметры в файле `config.properties`:
+2. Docker
+
+Для запуска PostgreSQL в контейнере Docker используйте `docker-compose.yml`:
+
+```yaml
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: coworking
+      POSTGRES_USER: coworking
+      POSTGRES_PASSWORD: coworking
+    ports:
+      - "5432:5432"
+
+```
+
+3. Настройте PostgreSQL базу данных и измените параметры в файле `config.properties`:
+
     ```properties
     db.url=jdbc:postgresql://localhost:5432/coworking
-    db.username=usver
-    db.password=12345
+    db.username=coworking
+    db.password=coworking
     ```
 
-3. Запустите миграции Liquibase для создания и заполнения таблиц:
+4. Запустите миграции Liquibase для создания и заполнения таблиц:
+
     ```sh
-    ./liquibase --changeLogFile=db/changelog/db.changelog-master.yaml update
+    mvn liquibase:update
     ```
 
 ## Запуск
@@ -52,28 +68,10 @@
     java -jar build/libs/coworking-service-1.0-SNAPSHOT.jar
     ```
 
-## Docker
+2.1. ИЛИ откройте проект через IDE, после чего запустите App.java 
 
-Для запуска PostgreSQL в контейнере Docker используйте `docker-compose.yml`:
 
-```yaml
-version: '3.8'
-services:
-  db:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: coworking
-      POSTGRES_USER: usver
-      POSTGRES_PASSWORD: 12345
-    ports:
-      - "5432:5432"
-
-```
 
 # Вклад в проект
 
 Вы можете внести свой вклад в проект, создавая pull request'ы с предложениями улучшений или исправлений.
-
-
-
- 
