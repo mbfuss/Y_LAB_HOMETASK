@@ -58,7 +58,6 @@ services:
     ```sh
     java -jar build/libs/coworking-service-1.0-SNAPSHOT.jar
     ```
-
 2.1. ИЛИ откройте проект через IDE, после чего запустите App.java 
 
 
