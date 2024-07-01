@@ -33,7 +33,8 @@ public class AppController {
             System.out.println("4. Бронирование ресурса");
             System.out.println("5. Просмотреть все ресурсы");
             System.out.println("6. Просмотреть все бронирования (админ)");
-            System.out.println("7. Выйти");
+            System.out.println("7. Удалить бронирование (админ)");
+            System.out.println("8. Выйти");
             System.out.print("Выберите опцию: ");
 
             int choice = Integer.parseInt(scanner.nextLine());
@@ -58,6 +59,9 @@ public class AppController {
                     viewBookings();
                     break;
                 case 7:
+                    deleteBooking(scanner);
+                    break;
+                case 8:
                     System.exit(0);
                     break;
                 default:
@@ -151,5 +155,16 @@ public class AppController {
         for (Booking booking : bookings) {
             System.out.println(booking);
         }
+    }
+
+    private void deleteBooking(Scanner scanner) {
+        if (!AuthUtils.isAdmin()) {
+            System.out.println("Ошибка: Доступ запрещен.");
+            return;
+        }
+
+        System.out.print("Введите ID бронирования для удаления: ");
+        Long bookingId = Long.parseLong(scanner.nextLine());
+        bookingService.deleteBooking(bookingId);
     }
 }

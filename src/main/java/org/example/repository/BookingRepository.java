@@ -98,4 +98,14 @@ public class BookingRepository {
         return exists;
     }
 
+    public void deleteBookingById(Long bookingId) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String sql = "DELETE FROM bookings WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, bookingId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

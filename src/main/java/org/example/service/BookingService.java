@@ -16,10 +16,9 @@ public class BookingService {
     }
 
     public boolean createBooking(User user, Resource resource, LocalDateTime startTime, LocalDateTime endTime) {
-        // Проверка пересечения времени бронирования
+        // Check for overlapping bookings
         if (bookingRepository.existsOverlappingBooking(resource.getId(), startTime, endTime)) {
-            // Если ресурс уже забронирован, вывести сообщение и вернуть false
-            System.out.println("Ресурс забронирован на данное время");
+            System.out.println("The resource is already booked for this time slot.");
             return false;
         }
 
@@ -29,11 +28,16 @@ public class BookingService {
         booking.setStartTime(startTime);
         booking.setEndTime(endTime);
         bookingRepository.save(booking);
-        System.out.println("Ресурс успешно забронирован");
+        System.out.println("Booking successful.");
         return true;
     }
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
+    }
+
+    public void deleteBooking(Long bookingId) {
+        bookingRepository.deleteBookingById(bookingId);
+        System.out.println("Booking deleted successfully.");
     }
 }
