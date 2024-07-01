@@ -33,7 +33,7 @@ services:
 
 ```
 
-3. Настройте PostgreSQL базу данных и измените параметры в файле `config.properties`:
+3. Настройте PostgreSQL базу данных и измените параметры в файлах `config.properties` и `liquibase.properties`:
 
     ```properties
     db.url=jdbc:postgresql://localhost:5432/coworking
@@ -59,8 +59,6 @@ services:
     java -jar build/libs/coworking-service-1.0-SNAPSHOT.jar
     ```
 2.1. ИЛИ откройте проект через IDE, после чего запустите App.java 
-
-
 
 # Вклад в проект
 
