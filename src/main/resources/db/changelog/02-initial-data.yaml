@@ -5,7 +5,6 @@ databaseChangeLog:
       changes:
         - insert:
             tableName: users
-            schemaName: coworking
             columns:
               - column:
                   name: id
@@ -22,7 +21,6 @@ databaseChangeLog:
 
         - insert:
             tableName: resources
-            schemaName: coworking
             columns:
               - column:
                   name: id

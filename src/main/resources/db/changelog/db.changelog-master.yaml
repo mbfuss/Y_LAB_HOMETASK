@@ -1,5 +1,5 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/01-create-tables.yaml
+      file: src/main/resources/db/changelog/01-create-tables.yaml
   - include:
-      file: db/changelog/02-initial-data.yaml
+      file: src/main/resources/db/changelog/02-initial-data.yaml

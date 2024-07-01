@@ -91,15 +91,15 @@ public class AppController {
         try {
             User user = userService.authenticateUser(username, password);
             AuthUtils.login(user);
-            System.out.println("Успешная аутентификация.");
+            System.out.println("Успешная аутентификация");
         } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Неверный логин или пароль");
         }
     }
 
     private void addResource(Scanner scanner) {
         if (!AuthUtils.isAdmin()) {
-            System.out.println("Ошибка: Доступ запрещен.");
+            System.out.println("Ошибка: Доступ запрещен");
             return;
         }
 
@@ -132,7 +132,6 @@ public class AppController {
         LocalDateTime endTime = LocalDateTime.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         bookingService.createBooking(AuthUtils.getLoggedInUser(), resource, startTime, endTime);
-        System.out.println("Ресурс успешно забронирован.");
     }
 
     private void viewResources() {

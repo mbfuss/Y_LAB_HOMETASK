@@ -11,9 +11,7 @@ public class UserService {
     }
 
     public void registerUser(String username, String password, boolean isAdmin) {
-        if (userRepository.findByUsername(username) != null) {
-            throw new IllegalArgumentException("Username already exists");
-        }
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
@@ -24,7 +22,7 @@ public class UserService {
     public User authenticateUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user == null || !user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Invalid username or password");
+            throw new IllegalArgumentException("Неверный логин или пароль");
         }
         return user;
     }

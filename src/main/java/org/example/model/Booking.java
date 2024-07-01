@@ -48,4 +48,15 @@ public class Booking {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "Бронирование " +
+                "id: " + id +
+                ", начало: " + startTime +
+                ", конец: " + endTime +
+                ", пользователь: " + user.getUsername() +
+                ", ресурс: " + resource.getName();
+
+    }
 }

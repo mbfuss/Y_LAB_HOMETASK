@@ -19,7 +19,7 @@ public class ResourceRepository {
 
     public void save(Resource resource) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "INSERT INTO coworking.resources (id, name, is_conference_room) VALUES (nextval('resource_seq'), ?, ?)";
+            String sql = "INSERT INTO resources (id, name, is_conference_room) VALUES (nextval('resource_seq'), ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, resource.getName());
             statement.setBoolean(2, resource.isConferenceRoom());
@@ -31,7 +31,7 @@ public class ResourceRepository {
 
     public Resource findById(Long id) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "SELECT * FROM coworking.resources WHERE id = ?";
+            String sql = "SELECT * FROM resources WHERE id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -51,7 +51,7 @@ public class ResourceRepository {
     public List<Resource> findAll() {
         List<Resource> resources = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "SELECT * FROM coworking.resources";
+            String sql = "SELECT * FROM resources";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -69,7 +69,7 @@ public class ResourceRepository {
 
     public void deleteAll() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "DELETE FROM coworking.resources";
+            String sql = "DELETE FROM resources";
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (SQLException e) {

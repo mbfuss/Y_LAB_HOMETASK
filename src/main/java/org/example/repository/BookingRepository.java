@@ -5,6 +5,7 @@ import org.example.model.Resource;
 import org.example.model.User;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class BookingRepository {
 
     public void save(Booking booking) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "INSERT INTO coworking.bookings (id, user_id, resource_id, start_time, end_time) VALUES (nextval('booking_seq'), ?, ?, ?, ?)";
+            String sql = "INSERT INTO bookings (id, user_id, resource_id, start_time, end_time) VALUES (nextval('booking_seq'), ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, booking.getUser().getId());
             statement.setLong(2, booking.getResource().getId());
@@ -37,9 +38,9 @@ public class BookingRepository {
         List<Booking> bookings = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String sql = "SELECT b.id, b.start_time, b.end_time, u.id as user_id, u.username, u.password, u.is_admin, r.id as resource_id, r.name, r.is_conference_room " +
-                    "FROM coworking.bookings b " +
-                    "JOIN coworking.users u ON b.user_id = u.id " +
-                    "JOIN coworking.resources r ON b.resource_id = r.id";
+                    "FROM bookings b " +
+                    "JOIN users u ON b.user_id = u.id " +
+                    "JOIN resources r ON b.resource_id = r.id";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
@@ -71,11 +72,30 @@ public class BookingRepository {
 
     public void deleteAll() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "DELETE FROM coworking.bookings";
+            String sql = "DELETE FROM bookings";
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public boolean existsOverlappingBooking(Long resourceId, LocalDateTime startTime, LocalDateTime endTime) {
+        boolean exists = false;
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String sql = "SELECT COUNT(*) > 0 FROM bookings WHERE resource_id = ? AND (? < end_time AND ? > start_time)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setLong(1, resourceId);
+            statement.setTimestamp(2, Timestamp.valueOf(startTime));
+            statement.setTimestamp(3, Timestamp.valueOf(endTime));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
 }

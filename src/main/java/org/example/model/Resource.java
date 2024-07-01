@@ -29,5 +29,13 @@ public class Resource {
     public void setConferenceRoom(boolean conferenceRoom) {
         isConferenceRoom = conferenceRoom;
     }
+
+    @Override
+    public String toString() {
+        return "Ресурс: " +
+                "id " + id +
+                ", название:'" + name + '\'' +
+                ", конференц-зал: " + isConferenceRoom;
+    }
 }
 

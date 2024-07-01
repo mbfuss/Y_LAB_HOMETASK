@@ -6,18 +6,14 @@ databaseChangeLog:
         - createSequence:
             sequenceName: booking_seq
             startValue: 1
-
         - createSequence:
             sequenceName: user_seq
             startValue: 1
-
         - createSequence:
             sequenceName: resource_seq
             startValue: 1
-
         - createTable:
             tableName: users
-            schemaName: coworking
             columns:
               - column:
                   name: id
@@ -42,10 +38,8 @@ databaseChangeLog:
                   type: BOOLEAN
                   constraints:
                     nullable: false
-
         - createTable:
             tableName: resources
-            schemaName: coworking
             columns:
               - column:
                   name: id
@@ -64,10 +58,8 @@ databaseChangeLog:
                   type: BOOLEAN
                   constraints:
                     nullable: false
-
         - createTable:
             tableName: bookings
-            schemaName: coworking
             columns:
               - column:
                   name: id
@@ -96,14 +88,12 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
-
         - addForeignKeyConstraint:
             baseTableName: bookings
             baseColumnNames: user_id
             referencedTableName: users
             referencedColumnNames: id
             constraintName: fk_bookings_users
-
         - addForeignKeyConstraint:
             baseTableName: bookings
             baseColumnNames: resource_id
