@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AppController {
+
+    Scanner scanner = new Scanner(System.in);
     private UserService userService;
     private ResourceService resourceService;
     private BookingService bookingService;
@@ -25,32 +27,30 @@ public class AppController {
     }
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("1. Регистрация");
-            System.out.println("2. Аутентификация");
-            System.out.println("3. Добавить ресурс (админ)");
-            System.out.println("4. Бронирование ресурса");
-            System.out.println("5. Просмотреть все ресурсы");
-            System.out.println("6. Просмотреть все бронирования (админ)");
-            System.out.println("7. Удалить бронирование (админ)");
-            System.out.println("8. Выйти");
+            printMenu();
             System.out.print("Выберите опцию: ");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Неверный выбор. Пожалуйста, попробуйте снова.");
+                continue;
+            }
 
             switch (choice) {
                 case 1:
-                    register(scanner);
+                    register();
                     break;
                 case 2:
-                    authenticate(scanner);
+                    authenticate();
                     break;
                 case 3:
-                    addResource(scanner);
+                    addResource();
                     break;
                 case 4:
-                    bookResource(scanner);
+                    bookResource();
                     break;
                 case 5:
                     viewResources();
@@ -59,7 +59,7 @@ public class AppController {
                     viewBookings();
                     break;
                 case 7:
-                    deleteBooking(scanner);
+                    deleteBooking();
                     break;
                 case 8:
                     System.exit(0);
@@ -69,8 +69,19 @@ public class AppController {
             }
         }
     }
+    private void printMenu() {
+        System.out.println("1. Регистрация");
+        System.out.println("2. Аутентификация");
+        System.out.println("3. Добавить ресурс (админ)");
+        System.out.println("4. Бронирование ресурса");
+        System.out.println("5. Просмотреть все ресурсы");
+        System.out.println("6. Просмотреть все бронирования (админ)");
+        System.out.println("7. Удалить бронирование (админ)");
+        System.out.println("8. Выйти");
+    }
 
-    private void register(Scanner scanner) {
+
+    private void register() {
         System.out.print("Введите имя пользователя: ");
         String username = scanner.nextLine();
         System.out.print("Введите пароль: ");
@@ -86,7 +97,7 @@ public class AppController {
         }
     }
 
-    private void authenticate(Scanner scanner) {
+    private void authenticate() {
         System.out.print("Введите имя пользователя: ");
         String username = scanner.nextLine();
         System.out.print("Введите пароль: ");
@@ -101,7 +112,7 @@ public class AppController {
         }
     }
 
-    private void addResource(Scanner scanner) {
+    private void addResource() {
         if (!AuthUtils.isAdmin()) {
             System.out.println("Ошибка: Доступ запрещен");
             return;
@@ -116,7 +127,7 @@ public class AppController {
         System.out.println("Ресурс успешно добавлен.");
     }
 
-    private void bookResource(Scanner scanner) {
+    private void bookResource() {
         if (AuthUtils.getLoggedInUser() == null) {
             System.out.println("Ошибка: Необходима аутентификация.");
             return;
@@ -157,7 +168,7 @@ public class AppController {
         }
     }
 
-    private void deleteBooking(Scanner scanner) {
+    private void deleteBooking() {
         if (!AuthUtils.isAdmin()) {
             System.out.println("Ошибка: Доступ запрещен.");
             return;
