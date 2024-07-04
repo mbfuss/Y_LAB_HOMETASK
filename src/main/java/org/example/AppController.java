@@ -3,9 +3,9 @@ package org.example;
 import org.example.model.Booking;
 import org.example.model.User;
 import org.example.model.Resource;
-import org.example.service.UserService;
-import org.example.service.ResourceService;
 import org.example.service.BookingService;
+import org.example.service.ResourceService;
+import org.example.service.UserService;
 import org.example.utils.AuthUtils;
 
 import java.time.LocalDateTime;
@@ -13,19 +13,28 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Контроллер приложения для взаимодействия с пользователем.
+ */
 public class AppController {
 
     Scanner scanner = new Scanner(System.in);
-    private UserService userService;
-    private ResourceService resourceService;
-    private BookingService bookingService;
+    private final UserService userService;
+    private final ResourceService resourceService;
+    private final BookingService bookingService;
 
+    /**
+     * Конструктор для инициализации сервиса пользователя, сервиса ресурсов и сервиса бронирований.
+     */
     public AppController(UserService userService, ResourceService resourceService, BookingService bookingService) {
         this.userService = userService;
         this.resourceService = resourceService;
         this.bookingService = bookingService;
     }
 
+    /**
+     * Метод для запуска основного цикла программы.
+     */
     public void start() {
         while (true) {
             printMenu();
@@ -69,6 +78,10 @@ public class AppController {
             }
         }
     }
+
+    /**
+     * Метод для вывода меню на экран.
+     */
     private void printMenu() {
         System.out.println("1. Регистрация");
         System.out.println("2. Аутентификация");
@@ -80,7 +93,9 @@ public class AppController {
         System.out.println("8. Выйти");
     }
 
-
+    /**
+     * Метод для регистрации нового пользователя.
+     */
     private void register() {
         System.out.print("Введите имя пользователя: ");
         String username = scanner.nextLine();
@@ -97,6 +112,9 @@ public class AppController {
         }
     }
 
+    /**
+     * Метод для аутентификации пользователя.
+     */
     private void authenticate() {
         System.out.print("Введите имя пользователя: ");
         String username = scanner.nextLine();
@@ -112,6 +130,9 @@ public class AppController {
         }
     }
 
+    /**
+     * Метод для добавления нового ресурса (доступно только для администраторов).
+     */
     private void addResource() {
         if (!AuthUtils.isAdmin()) {
             System.out.println("Ошибка: Доступ запрещен");
@@ -127,6 +148,9 @@ public class AppController {
         System.out.println("Ресурс успешно добавлен.");
     }
 
+    /**
+     * Метод для бронирования ресурса.
+     */
     private void bookResource() {
         if (AuthUtils.getLoggedInUser() == null) {
             System.out.println("Ошибка: Необходима аутентификация.");
@@ -149,6 +173,9 @@ public class AppController {
         bookingService.createBooking(AuthUtils.getLoggedInUser(), resource, startTime, endTime);
     }
 
+    /**
+     * Метод для просмотра всех ресурсов.
+     */
     private void viewResources() {
         List<Resource> resources = resourceService.getAllResources();
         for (Resource resource : resources) {
@@ -156,6 +183,9 @@ public class AppController {
         }
     }
 
+    /**
+     * Метод для просмотра всех бронирований (доступно только для администраторов).
+     */
     private void viewBookings() {
         if (!AuthUtils.isAdmin()) {
             System.out.println("Ошибка: Доступ запрещен.");
@@ -168,6 +198,9 @@ public class AppController {
         }
     }
 
+    /**
+     * Метод для удаления бронирования (доступно только для администраторов).
+     */
     private void deleteBooking() {
         if (!AuthUtils.isAdmin()) {
             System.out.println("Ошибка: Доступ запрещен.");

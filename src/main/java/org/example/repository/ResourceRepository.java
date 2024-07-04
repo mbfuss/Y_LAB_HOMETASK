@@ -6,21 +6,30 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Репозиторий для работы с ресурсами.
+ */
 public class ResourceRepository {
     private String url;
     private String username;
     private String password;
 
+    /**
+     * Конструктор для инициализации ResourceRepository с указанными параметрами подключения к базе данных.
+     */
     public ResourceRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
     }
 
+    /**
+     * Сохраняет новый ресурс в базе данных.
+     */
     public void save(Resource resource) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "INSERT INTO resources (id, name, is_conference_room) VALUES (nextval('resource_seq'), ?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
+        String sql = "INSERT INTO resources (id, name, is_conference_room) VALUES (nextval('resource_seq'), ?, ?)";
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, resource.getName());
             statement.setBoolean(2, resource.isConferenceRoom());
             statement.executeUpdate();
@@ -29,18 +38,22 @@ public class ResourceRepository {
         }
     }
 
+    /**
+     * Возвращает ресурс по его идентификатору.
+     */
     public Resource findById(Long id) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "SELECT * FROM resources WHERE id = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM resources WHERE id = ?";
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Resource resource = new Resource();
-                resource.setId(resultSet.getLong("id"));
-                resource.setName(resultSet.getString("name"));
-                resource.setConferenceRoom(resultSet.getBoolean("is_conference_room"));
-                return resource;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Resource resource = new Resource();
+                    resource.setId(resultSet.getLong("id"));
+                    resource.setName(resultSet.getString("name"));
+                    resource.setConferenceRoom(resultSet.getBoolean("is_conference_room"));
+                    return resource;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,12 +61,15 @@ public class ResourceRepository {
         return null;
     }
 
+    /**
+     * Возвращает список всех ресурсов из базы данных.
+     */
     public List<Resource> findAll() {
         List<Resource> resources = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "SELECT * FROM resources";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+        String sql = "SELECT * FROM resources";
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 Resource resource = new Resource();
                 resource.setId(resultSet.getLong("id"));
@@ -67,10 +83,13 @@ public class ResourceRepository {
         return resources;
     }
 
+    /**
+     * Удаляет все ресурсы из базы данных.
+     */
     public void deleteAll() {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String sql = "DELETE FROM resources";
-            Statement statement = connection.createStatement();
+        String sql = "DELETE FROM resources";
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

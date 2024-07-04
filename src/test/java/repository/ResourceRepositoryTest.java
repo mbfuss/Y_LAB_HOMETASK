@@ -13,9 +13,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
+@DisplayName("Тесты для ResourceRepository")
 class ResourceRepositoryTest {
 
     @Container
@@ -27,6 +28,7 @@ class ResourceRepositoryTest {
     private ResourceRepository resourceRepository;
 
     @BeforeEach
+    @DisplayName("Подготовка окружения")
     void setUp() {
         String url = postgreSQLContainer.getJdbcUrl();
         String username = postgreSQLContainer.getUsername();
@@ -44,6 +46,7 @@ class ResourceRepositoryTest {
     }
 
     @AfterEach
+    @DisplayName("Очистка окружения")
     void tearDown() {
         try (Connection connection = DriverManager.getConnection(postgreSQLContainer.getJdbcUrl(),
                 postgreSQLContainer.getUsername(), postgreSQLContainer.getPassword());
@@ -56,6 +59,7 @@ class ResourceRepositoryTest {
     }
 
     @Test
+    @DisplayName("Сохранение и поиск по ID")
     void testSaveAndFindById() {
         Resource resource = new Resource();
         resource.setName("Conference Room A");
@@ -64,12 +68,13 @@ class ResourceRepositoryTest {
         resourceRepository.save(resource);
 
         Resource savedResource = resourceRepository.findById(1L);
-        assertNotNull(savedResource);
-        assertEquals("Conference Room A", savedResource.getName());
-        assertTrue(savedResource.isConferenceRoom());
+        assertThat(savedResource).isNotNull();
+        assertThat(savedResource.getName()).isEqualTo("Conference Room A");
+        assertThat(savedResource.isConferenceRoom()).isTrue();
     }
 
     @Test
+    @DisplayName("Поиск всех записей")
     void testFindAll() {
         Resource resource1 = new Resource();
         resource1.setName("Conference Room A");
@@ -83,10 +88,13 @@ class ResourceRepositoryTest {
         resourceRepository.save(resource2);
 
         List<Resource> resources = resourceRepository.findAll();
-        assertEquals(2, resources.size());
+        assertThat(resources).hasSize(2)
+                .extracting(Resource::getName)
+                .containsExactlyInAnyOrder("Conference Room A", "Conference Room B");
     }
 
     @Test
+    @DisplayName("Удаление всех записей")
     void testDeleteAll() {
         Resource resource = new Resource();
         resource.setName("Conference Room A");
@@ -96,6 +104,6 @@ class ResourceRepositoryTest {
         resourceRepository.deleteAll();
 
         List<Resource> resources = resourceRepository.findAll();
-        assertTrue(resources.isEmpty());
+        assertThat(resources).isEmpty();
     }
 }

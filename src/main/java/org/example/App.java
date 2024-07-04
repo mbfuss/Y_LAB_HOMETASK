@@ -1,33 +1,30 @@
 package org.example;
 
-import liquibase.integration.commandline.Main;
+import org.example.config.DatabaseConfig;
 import org.example.repository.UserRepository;
 import org.example.repository.ResourceRepository;
 import org.example.repository.BookingRepository;
 import org.example.service.UserService;
 import org.example.service.ResourceService;
 import org.example.service.BookingService;
+import org.example.service.serviceFactory.ServiceFactory;
 
 import java.io.IOException;
-import java.util.Properties;
 
 public class App {
     public static void main(String[] args) {
-        Properties properties = new Properties();
         try {
-            properties.load(Main.class.getClassLoader().getResourceAsStream("config.properties"));
+            DatabaseConfig databaseConfig = new DatabaseConfig();
 
-            String url = properties.getProperty("db.url");
-            String username = properties.getProperty("db.username");
-            String password = properties.getProperty("db.password");
+            UserRepository userRepository = databaseConfig.createUserRepository();
+            ResourceRepository resourceRepository = databaseConfig.createResourceRepository();
+            BookingRepository bookingRepository = databaseConfig.createBookingRepository();
 
-            UserRepository userRepository = new UserRepository(url, username, password);
-            ResourceRepository resourceRepository = new ResourceRepository(url, username, password);
-            BookingRepository bookingRepository = new BookingRepository(url, username, password);
+            ServiceFactory serviceFactory = new ServiceFactory(userRepository, resourceRepository, bookingRepository);
 
-            UserService userService = new UserService(userRepository);
-            ResourceService resourceService = new ResourceService(resourceRepository);
-            BookingService bookingService = new BookingService(bookingRepository);
+            UserService userService = serviceFactory.createUserService();
+            ResourceService resourceService = serviceFactory.createResourceService();
+            BookingService bookingService = serviceFactory.createBookingService();
 
             AppController appController = new AppController(userService, resourceService, bookingService);
             appController.start();
