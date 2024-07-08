@@ -1,29 +1,17 @@
-package org.example.model;
+package org.example.dto;
 
-public class User {
-    private String id;
+public class UserDTO {
     private String username;
     private String password;
     private boolean isAdmin;
 
-    // Конструктор по умолчанию
-    public User() {}
-
-    // Конструктор с параметрами
-    public User(String id, String username, String password, boolean isAdmin) {
-        this.id = id;
+    public UserDTO(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
     }
 
-    // Геттеры и сеттеры
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public UserDTO() {
     }
 
     public String getUsername() {

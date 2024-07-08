@@ -2,43 +2,45 @@ package org.example.service;
 
 import org.example.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Сервисный класс для управления пользователями.
- */
 public class UserService {
-    private Map<String, User> users = new HashMap<>();
+    // Список пользователей
+    private List<User> users = new ArrayList<>();
 
-    /**
-     * Регистрирует нового пользователя в системе.
-     *
-     *  username Имя пользователя (уникальный идентификатор).
-     *  password Пароль пользователя.
-     *  isAdmin  Флаг, указывающий, является ли пользователь администратором.
-     * throws IllegalArgumentException Если пользователь с таким именем уже существует.
-     */
-    public void registerUser(String username, String password, boolean isAdmin) {
-        if (users.containsKey(username)) {
-            throw new IllegalArgumentException("User already exists");
-        }
-        users.put(username, new User(username, password, isAdmin));
+    // Конструктор для добавления примерных пользователей
+    public UserService() {
+        // Пример добавления пользователей при инициализации сервиса
+        users.add(new User("1", "admin", "password", true));
+        users.add(new User("2", "user", "password", false));
     }
 
-    /**
-     * Аутентифицирует пользователя по его имени пользователя и паролю.
-     *
-     *  username Имя пользователя для аутентификации.
-     *  password Пароль пользователя.
-     * return Аутентифицированный пользователь.
-     * throws IllegalArgumentException Если имя пользователя или пароль неверные.
-     */
-    public User authenticateUser(String username, String password) {
-        User user = users.get(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+    // Метод для получения пользователя по его идентификатору
+    public User getUserById(String id) {
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Метод для регистрации нового пользователя
+    public void registerUser(String username, String password, boolean isAdmin) {
+        // Проверяем, не существует ли уже пользователь с таким же именем
+        if (users.stream().anyMatch(user -> user.getUsername().equals(username))) {
+            throw new IllegalArgumentException("User already exists");
         }
-        throw new IllegalArgumentException("Invalid username or password");
+        // Создаем нового пользователя и добавляем его в список
+        User newUser = new User(String.valueOf(users.size() + 1), username, password, isAdmin);
+        users.add(newUser);
+    }
+
+    // Метод для аутентификации пользователя
+    public User authenticateUser(String username, String password) {
+        // Ищем пользователя по имени пользователя и паролю
+        return users.stream()
+                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
     }
 }

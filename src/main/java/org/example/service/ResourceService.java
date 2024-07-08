@@ -2,46 +2,35 @@ package org.example.service;
 
 import org.example.model.Resource;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Сервисный класс для управления ресурсами.
- */
 public class ResourceService {
-    private Map<String, Resource> resources = new HashMap<>();
+    // Список ресурсов
+    private List<Resource> resources = new ArrayList<>();
 
-    /**
-     * Добавляет новый ресурс в систему.
-     *
-     *  id               Идентификатор ресурса.
-     *  name             Название ресурса.
-     *  isConferenceRoom Флаг, указывающий, является ли ресурс конференц-залом.
-     * throws IllegalArgumentException Если ресурс с таким идентификатором уже существует.
-     */
-    public void addResource(String id, String name, boolean isConferenceRoom) {
-        if (resources.containsKey(id)) {
-            throw new IllegalArgumentException("Resource with this ID already exists");
-        }
-        resources.put(id, new Resource(id, name, isConferenceRoom));
+    // Конструктор для добавления примерных ресурсов
+    public ResourceService() {
+        // Пример добавления ресурсов при инициализации сервиса
+        resources.add(new Resource("1", "Конференц-зал A", true));
+        resources.add(new Resource("2", "Рабочее пространство B", false));
     }
 
-    /**
-     * Возвращает ресурс по его идентификатору.
-     *
-     *  id Идентификатор ресурса.
-     * return Ресурс с указанным идентификатором или null, если ресурс не найден.
-     */
-    public Resource getResource(String id) {
-        return resources.get(id);
+    // Метод для получения всех ресурсов
+    public List<Resource> getAllResources() {
+        return resources;
     }
 
-    /**
-     * Возвращает все ресурсы, доступные в системе.
-     *
-     * return Карта всех ресурсов, где ключ - идентификатор ресурса, значение - сам ресурс.
-     */
-    public Map<String, Resource> getAllResources() {
-        return new HashMap<>(resources);
+    // Метод для получения ресурса по его идентификатору
+    public Resource getResourceById(String id) {
+        return resources.stream()
+                .filter(resource -> resource.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Метод для добавления нового ресурса
+    public void addResource(Resource resource) {
+        resources.add(resource);
     }
 }
