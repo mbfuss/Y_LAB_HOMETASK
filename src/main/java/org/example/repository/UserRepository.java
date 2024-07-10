@@ -3,6 +3,8 @@ package org.example.repository;
 import org.example.model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Репозиторий для работы с пользователями.
@@ -73,4 +75,27 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+
+    public List<User> findAll() {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String sql = "SELECT * FROM users";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        User user = new User();
+                        user.setId(rs.getLong("id"));
+                        user.setUsername(rs.getString("username"));
+                        user.setPassword(rs.getString("password"));
+                        user.setAdmin(rs.getBoolean("is_admin"));
+                        users.add(user);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
 }

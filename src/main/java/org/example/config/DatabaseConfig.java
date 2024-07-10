@@ -14,6 +14,14 @@ import java.util.Properties;
 public class DatabaseConfig {
     private Properties properties;
 
+    static {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Конструктор для инициализации настроек базы данных из файла config.properties.
      * throws IOException если произошла ошибка при загрузке файла настроек.

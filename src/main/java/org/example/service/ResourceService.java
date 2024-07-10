@@ -5,7 +5,7 @@ import org.example.model.Resource;
 import java.util.List;
 
 public interface ResourceService {
-    void addResource(String name, boolean isConferenceRoom);
+    void addResource(Resource resource);
     Resource getResource(Long id);
     List<Resource> getAllResources();
 }
