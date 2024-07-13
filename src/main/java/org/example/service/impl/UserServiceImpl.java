@@ -1,41 +1,78 @@
 package org.example.service.impl;
 
+import org.example.aspects.AspectExecutor;
 import org.example.model.User;
 import org.example.repository.UserRepository;
 import org.example.service.UserService;
 
-/**
- * Реализация интерфейса UserService для управления пользователями.
- */
-public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+import java.util.List;
 
-    /**
-     * Конструктор для инициализации UserServiceImpl с указанным репозиторием пользователей.
-     */
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+
     public UserServiceImpl(UserRepository userRepository) {
+        if (userRepository == null) {
+            throw new IllegalArgumentException("userRepository cannot be null");
+        }
         this.userRepository = userRepository;
     }
 
-    /**
-     * Регистрирует нового пользователя с указанными параметрами.
-     */
-    public void registerUser(String username, String password, boolean isAdmin) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setAdmin(isAdmin);
-        userRepository.save(user);
+    @Override
+    public void registerUser(User user) {
+        long startTime = System.currentTimeMillis();
+        String methodName = "registerUser";
+        try {
+            AspectExecutor.logMethodStart(methodName);
+            userRepository.save(user);
+            AspectExecutor.auditAction(methodName, user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            AspectExecutor.logMethodEnd(methodName, duration);
+        }
     }
 
-    /**
-     * Аутентифицирует пользователя по указанным имени пользователя и паролю.
-     */
+    @Override
     public User authenticateUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
-            throw new IllegalArgumentException("Неверный логин или пароль");
+        long startTime = System.currentTimeMillis();
+        String methodName = "authenticateUser";
+        try {
+            AspectExecutor.logMethodStart(methodName);
+            User user = userRepository.findByUsername(username);
+            if (user == null || !user.getPassword().equals(password)) {
+                throw new IllegalArgumentException("Invalid username or password");
+            }
+            AspectExecutor.auditAction(methodName, username);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            AspectExecutor.logMethodEnd(methodName, duration);
         }
-        return user;
+        return null;
+    }
+
+
+    @Override
+    public List<User> getAllUsers() {
+        long startTime = System.currentTimeMillis();
+        String methodName = "getAllUsers";
+        try {
+            AspectExecutor.logMethodStart(methodName);
+            List<User> users = userRepository.findAll();
+            AspectExecutor.auditAction(methodName);
+            return users;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
+            AspectExecutor.logMethodEnd(methodName, duration);
+        }
+        return null;
     }
 }

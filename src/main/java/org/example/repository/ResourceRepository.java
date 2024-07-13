@@ -14,9 +14,13 @@ public class ResourceRepository {
     private String username;
     private String password;
 
+    public ResourceRepository() {
+    }
+
     /**
      * Конструктор для инициализации ResourceRepository с указанными параметрами подключения к базе данных.
      */
+
     public ResourceRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;

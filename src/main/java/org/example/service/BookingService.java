@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingService {
-    boolean createBooking(User user, Resource resource, LocalDateTime startTime, LocalDateTime endTime);
+    boolean createBooking(Booking booking);
     void deleteBooking(Long bookingId);
     List<Booking> getAllBookings();
 

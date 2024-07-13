@@ -117,6 +117,7 @@ public class BookingRepository {
         return exists;
     }
 
+
     /**
      * Удаляет бронирование по его идентификатору.
      */
